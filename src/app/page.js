@@ -13,6 +13,7 @@ export default function Home() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState("duration");
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -37,6 +38,21 @@ export default function Home() {
 
     fetchWorkouts();
   }, []);
+  const sortedWorkouts = [...workouts].sort((a, b) => {
+    if (sortBy === "duration") {
+      return Number(a.duration) - Number(b.duration);
+    }
+
+    if (sortBy === "calories") {
+      return Number(a.caloriesBurned) - Number(b.caloriesBurned);
+    }
+
+    if (sortBy === "rating") {
+      return Number(b.rating) - Number(a.rating);
+    }
+
+    return 0;
+  });
 
   return (
     <>
@@ -93,18 +109,48 @@ export default function Home() {
           className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10"
         >
           {/* Section Heading */}
-          <div className="mb-10">
-            <p className="text-sm font-bold tracking-[0.2em] text-[#ccff00]">
-              THE LIBRARY
-            </p>
+          <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-bold tracking-[0.2em] text-[#ccff00]">
+                THE LIBRARY
+              </p>
 
-            <h2 className="mt-3 text-4xl font-black sm:text-5xl">
-              THE LIBRARY
-            </h2>
+              <h2 className="mt-3 text-4xl font-black sm:text-5xl">
+                THE LIBRARY
+              </h2>
 
-            <p className="mt-3 text-white/50">
-              Twelve lifts covering every major muscle group.
-            </p>
+              <p className="mt-3 text-white/50">
+                Twelve lifts covering every major muscle group.
+              </p>
+            </div>
+
+            <div className="shrink-0">
+              <label
+                htmlFor="sort"
+                className="mb-2 block text-xs font-bold tracking-wider text-white/40"
+              >
+                SORT BY
+              </label>
+
+              <select
+                id="sort"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-semibold text-white outline-none transition focus:border-[#ccff00]"
+              >
+                <option value="duration" className="bg-[#0b0d0d]">
+                  Duration
+                </option>
+
+                <option value="calories" className="bg-[#0b0d0d]">
+                  Calories
+                </option>
+
+                <option value="rating" className="bg-[#0b0d0d]">
+                  Rating
+                </option>
+              </select>
+            </div>
           </div>
 
           {/* ================= LOADING ================= */}
@@ -133,9 +179,9 @@ export default function Home() {
           )}
 
           {/* ================= WORKOUT GRID ================= */}
-          {!loading && !error && workouts.length > 0 && (
+          {!loading && !error && sortedWorkouts.length > 0 && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {workouts.map((workout) => (
+              {sortedWorkouts.map((workout) => (
                 <WorkoutCard
                   key={workout.id}
                   workout={workout}
@@ -145,7 +191,7 @@ export default function Home() {
           )}
 
           {/* ================= EMPTY ================= */}
-          {!loading && !error && workouts.length === 0 && (
+          {!loading && !error && sortedWorkouts.length === 0 && (
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center">
               <h3 className="text-2xl font-black">
                 NO WORKOUTS FOUND
