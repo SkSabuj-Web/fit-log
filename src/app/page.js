@@ -60,48 +60,50 @@ export default function Home() {
 
       <main className="bg-[#0b0d0d] text-white">
         {/* ================= HERO ================= */}
-        <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
-          {/* Hero Content */}
-          <div className="max-w-2xl">
-            <p className="mb-5 text-sm font-bold tracking-[0.25em] text-[#ccff00]">
-              WORKOUT LIBRARY
-            </p>
+       
+<section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-12 bg-[#151818] px-5 py-16 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
+  {/* Hero Content */}
+  <div className="max-w-2xl">
+    <p className="mb-5 text-sm font-bold tracking-[0.25em] text-[#ccff00]">
+      WORKOUT LIBRARY
+    </p>
 
-            <h1 className="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              TRAIN WITH INTENT.
-              <br />
-              LOG EVERY SET.
-            </h1>
+    <h1 className="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+      TRAIN WITH INTENT.
+      <br />
+      LOG EVERY SET.
+    </h1>
 
-            <p className="mt-7 max-w-xl text-base leading-7 text-white/60 sm:text-lg">
-              FitLog is a dark, no-nonsense gym companion: pick a lift,
-              lock it into today&apos;s plan, and watch the week&apos;s work
-              add up.
-            </p>
+    <p className="mt-7 max-w-xl text-base leading-7 text-white/60 sm:text-lg">
+      FitLog is a dark, no-nonsense gym companion: pick a lift,
+      lock it into today&apos;s plan, and watch the week&apos;s work
+      add up.
+    </p>
 
-            <a
-              href="#library"
-              className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#ccff00] px-6 py-3.5 text-sm font-black tracking-wide text-black transition hover:scale-105 hover:bg-[#d8ff33]"
-            >
-              BROWSE WORKOUTS
-              <span className="text-lg">↘</span>
-            </a>
-          </div>
+    <a
+      href="#library"
+      className="mt-9 inline-flex items-center gap-3 rounded-full bg-[#ccff00] px-6 py-3.5 text-sm font-black tracking-wide text-black transition hover:scale-105 hover:bg-[#d8ff33]"
+    >
+      BROWSE WORKOUTS
+      <span className="text-lg">↘</span>
+    </a>
+  </div>
 
-          {/* Hero Image */}
-          <div className="relative mx-auto w-full max-w-xl">
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-              <Image
-                src={banner}
-                alt="FitLog workout"
-                priority
-                className="h-auto w-full object-cover"
-              />
-            </div>
+  {/* Hero Image */}
+  <div className="relative mx-auto flex w-full max-w-lg justify-center">
+    <Image
+      src={banner}
+      alt="FitLog workout"
+      priority
+      className="h-auto w-[85%] object-contain sm:w-[75%] lg:w-[80%]"
+    />
 
-            <div className="pointer-events-none absolute -bottom-6 -right-6 h-32 w-32 rounded-full bg-[#ccff00]/10 blur-3xl" />
-          </div>
-        </section>
+    {/* Green Glow */}
+    <div className="pointer-events-none absolute -bottom-6 right-8 h-32 w-32 rounded-full bg-[#ccff00]/10 blur-3xl" />
+  </div>
+</section>
+
+
 
         {/* ================= LIBRARY ================= */}
         <section
