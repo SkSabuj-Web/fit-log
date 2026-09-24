@@ -3,21 +3,31 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { ArrowLeft, Clock3, Flame, Star } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
+import { usePlan } from "@/context/PlanContext";
 
 export default function WorkoutDetails({ params }) {
+  // Next.js 16: params is a Promise
+  const { id } = use(params);
+
   const [workout, setWorkout] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+
+  const { plan, saved, addToPlan, saveForLater } = usePlan();
 
   useEffect(() => {
     const fetchWorkout = async () => {
       try {
+        setLoading(true);
+        setError("");
+
         const response = await fetch(
-          `https://api.abcz.workers.dev/api/fitlog/${params.id}`
+          `https://api.abcz.workers.dev/api/fitlog/${id}`
         );
 
         if (!response.ok) {
@@ -25,6 +35,7 @@ export default function WorkoutDetails({ params }) {
         }
 
         const data = await response.json();
+
         setWorkout(data);
       } catch (err) {
         setError("Workout not found.");
@@ -34,7 +45,28 @@ export default function WorkoutDetails({ params }) {
     };
 
     fetchWorkout();
-  }, [params.id]);
+  }, [id]);
+
+  // Toast
+  const showToast = (message) => {
+    setToast(message);
+
+    setTimeout(() => {
+      setToast("");
+    }, 2500);
+  };
+
+  // Add workout to today's plan
+  const handleAddToPlan = () => {
+    const result = addToPlan(workout);
+    showToast(result.message);
+  };
+
+  // Save workout
+  const handleSaveForLater = () => {
+    const result = saveForLater(workout);
+    showToast(result.message);
+  };
 
   // Loading
   if (loading) {
@@ -74,7 +106,7 @@ export default function WorkoutDetails({ params }) {
 
             <Link
               href="/#library"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#ccff00] px-6 py-3 text-sm font-black text-black"
+              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#ccff00] px-6 py-3 text-sm font-black text-black transition hover:bg-[#d8ff33]"
             >
               <ArrowLeft size={17} />
               BACK TO LIBRARY
@@ -84,6 +116,9 @@ export default function WorkoutDetails({ params }) {
       </>
     );
   }
+
+  const isInPlan = plan.some((item) => item.id === workout.id);
+  const isSaved = saved.some((item) => item.id === workout.id);
 
   return (
     <>
@@ -141,6 +176,7 @@ export default function WorkoutDetails({ params }) {
 
               {/* Quick Stats */}
               <div className="mt-8 grid grid-cols-3 gap-3">
+                {/* Duration */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                   <Clock3 size={18} className="text-[#ccff00]" />
 
@@ -153,6 +189,7 @@ export default function WorkoutDetails({ params }) {
                   </p>
                 </div>
 
+                {/* Calories */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                   <Flame size={18} className="text-[#ccff00]" />
 
@@ -165,6 +202,7 @@ export default function WorkoutDetails({ params }) {
                   </p>
                 </div>
 
+                {/* Rating */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                   <Star size={18} className="text-[#ccff00]" />
 
@@ -243,17 +281,38 @@ export default function WorkoutDetails({ params }) {
 
               {/* Action Buttons */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <button className="flex-1 rounded-full bg-[#ccff00] px-6 py-3.5 text-sm font-black text-black transition hover:bg-[#d8ff33]">
-                  ADD TO TODAY&apos;S PLAN
+                {/* Add To Plan */}
+                <button
+                  type="button"
+                  onClick={handleAddToPlan}
+                  disabled={isInPlan}
+                  className="flex-1 rounded-full bg-[#ccff00] px-6 py-3.5 text-sm font-black text-black transition hover:bg-[#d8ff33] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isInPlan
+                    ? "ADDED TO PLAN"
+                    : "ADD TO TODAY'S PLAN"}
                 </button>
 
-                <button className="flex-1 rounded-full border border-white/20 px-6 py-3.5 text-sm font-black text-white transition hover:border-[#ccff00] hover:text-[#ccff00]">
-                  SAVE FOR LATER
+                {/* Save */}
+                <button
+                  type="button"
+                  onClick={handleSaveForLater}
+                  disabled={isSaved}
+                  className="flex-1 rounded-full border border-white/20 px-6 py-3.5 text-sm font-black text-white transition hover:border-[#ccff00] hover:text-[#ccff00] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isSaved ? "SAVED" : "SAVE FOR LATER"}
                 </button>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Toast */}
+        {toast && (
+          <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-[#ccff00] px-5 py-3 text-sm font-bold text-black shadow-xl">
+            {toast}
+          </div>
+        )}
       </main>
     </>
   );

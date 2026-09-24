@@ -2,7 +2,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Navbar from "@/components/Navbar";
@@ -26,6 +25,7 @@ export default function Home() {
         }
 
         const data = await response.json();
+
         setWorkouts(data);
       } catch (err) {
         setError("Unable to load workouts. Please try again.");
@@ -42,8 +42,9 @@ export default function Home() {
       <Navbar />
 
       <main className="bg-[#0b0d0d] text-white">
-        {/* Hero */}
+        {/* ================= HERO ================= */}
         <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
+          {/* Hero Content */}
           <div className="max-w-2xl">
             <p className="mb-5 text-sm font-bold tracking-[0.25em] text-[#ccff00]">
               WORKOUT LIBRARY
@@ -70,6 +71,7 @@ export default function Home() {
             </a>
           </div>
 
+          {/* Hero Image */}
           <div className="relative mx-auto w-full max-w-xl">
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
               <Image
@@ -84,11 +86,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Library */}
+        {/* ================= LIBRARY ================= */}
         <section
           id="library"
           className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10"
         >
+          {/* Section Heading */}
           <div className="mb-10">
             <p className="text-sm font-bold tracking-[0.2em] text-[#ccff00]">
               THE LIBRARY
@@ -103,7 +106,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Loading */}
+          {/* ================= LOADING ================= */}
           {loading && (
             <div className="flex min-h-60 items-center justify-center">
               <div className="flex items-center gap-3 text-white/60">
@@ -113,19 +116,43 @@ export default function Home() {
             </div>
           )}
 
-          {/* Error */}
+          {/* ================= ERROR ================= */}
           {!loading && error && (
             <div className="rounded-2xl border border-red-400/20 bg-red-400/5 p-8 text-center">
               <p className="text-red-300">{error}</p>
+
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-5 rounded-full bg-[#ccff00] px-5 py-2.5 text-sm font-bold text-black"
+              >
+                TRY AGAIN
+              </button>
             </div>
           )}
 
-          {/* Workout Grid */}
-          {!loading && !error && (
+          {/* ================= WORKOUT GRID ================= */}
+          {!loading && !error && workouts.length > 0 && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {workouts.map((workout) => (
-                <WorkoutCard key={workout.id} workout={workout} />
+                <WorkoutCard
+                  key={workout.id}
+                  workout={workout}
+                />
               ))}
+            </div>
+          )}
+
+          {/* ================= EMPTY ================= */}
+          {!loading && !error && workouts.length === 0 && (
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center">
+              <h3 className="text-2xl font-black">
+                NO WORKOUTS FOUND
+              </h3>
+
+              <p className="mt-2 text-white/50">
+                There are currently no workouts available.
+              </p>
             </div>
           )}
         </section>
