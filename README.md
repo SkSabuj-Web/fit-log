@@ -4,7 +4,7 @@ A modern workout library and planning web app built with Next.js and Tailwind CS
 
 ## Live Demo
 
-https://your-live-url.vercel.app
+https://fit-log-peach.vercel.app/
 
 ## GitHub Repository
 
