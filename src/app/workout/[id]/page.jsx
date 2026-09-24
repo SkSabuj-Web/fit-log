@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { ArrowLeft, Clock3, Flame, Star } from "lucide-react";
+import Footer from "@/components/Footer";
 
 import Navbar from "@/components/Navbar";
 import { usePlan } from "@/context/PlanContext";
@@ -113,6 +114,7 @@ export default function WorkoutDetails({ params }) {
             </Link>
           </div>
         </main>
+        <Footer />
       </>
     );
   }
@@ -314,6 +316,7 @@ export default function WorkoutDetails({ params }) {
           </div>
         )}
       </main>
+        <Footer />
     </>
   );
 }

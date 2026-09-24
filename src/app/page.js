@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Footer from "@/components/Footer";
 
 import Navbar from "@/components/Navbar";
 import WorkoutCard from "@/components/WorkoutCard";
@@ -157,6 +158,7 @@ export default function Home() {
           )}
         </section>
       </main>
+      <Footer />
     </>
   );
 }
